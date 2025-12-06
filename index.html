@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบยืมอุปกรณ์กีฬา</title>
+
+<style>
+    body {
+        font-family: 'Prompt', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #00aaff, #0055ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 18px;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(10px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+        text-align: center;
+        color: #0055ff;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #333;
+        margin-top: 10px;
+        display: block;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0 18px 0;
+        border-radius: 10px;
+        border: 2px solid #dce3ff;
+        background: #f7f9ff;
+        font-size: 15px;
+        transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+        border-color: #0055ff;
+        background: white;
+        box-shadow: 0 0 8px rgba(0,85,255,0.3);
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        font-size: 17px;
+        background: linear-gradient(135deg, #0055ff, #00aaff);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.25s;
+        box-shadow: 0 5px 15px rgba(0,85,255,0.4);
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #0041cc, #0093dd);
+        transform: translateY(-2px);
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>📦 ระบบยืมอุปกรณ์กีฬา</h2>
+
+    <label>ชื่อผู้ยืม</label>
+    <input type="text" id="borrower" placeholder="กรอกชื่อผู้ยืม">
+
+    <label>เลือกอุปกรณ์กีฬา</label>
+    <select id="item">
+        <option value="ฟุตบอล">⚽ ฟุตบอล</option>
+        <option value="บาสเกตบอล">🏀 บาสเกตบอล</option>
+        <option value="วอลเลย์บอล">🏐 วอลเลย์บอล</option>
+        <option value="ปิงปอง">🏓 ปิงปอง</option>
+        <option value="เชือกกระโดด">🪢 เชือกกระโดด</option>
+    </select>
+
+    <label>วันที่ยืม</label>
+    <input type="date" id="date">
+
+    <button onclick="sendToDiscord()">บันทึกการยืม</button>
+</div>
+
+<script>
+    // ⭐ ใส่ Discord Webhook URL ของคุณตรงนี้
+    const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1444683050607837326/03MLghTEsrjL_1T7bjne6ATyALbOnR5fhfgnsyXXivC5-GKAOt1pP-oRgVhqMgVhzNEf";
+
+    function sendToDiscord() {
+        const borrower = document.getElementById("borrower").value;
+        const item = document.getElementById("item").value;
+        const date = document.getElementById("date").value;
+
+        if (!borrower || !date) {
+            alert("⚠ กรุณากรอกข้อมูลให้ครบ");
+            return;
+        }
+
+        const message = {
+            embeds: [{
+                title: "📣 มีการยืมอุปกรณ์กีฬา",
+                color: 3447003,
+                fields: [
+                    { name: "👤 ผู้ยืม", value: borrower, inline: false },
+                    { name: "🏅 อุปกรณ์", value: item, inline: false },
+                    { name: "📅 วันที่ยืม", value: date, inline: false }
+                ],
+                timestamp: new Date()
+            }]
+        };
+
+        fetch(DISCORD_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(message)
+        })
+        .then(() => {
+            alert("✅ ส่งข้อมูลสำเร็จ!");
+            document.getElementById("borrower").value = "";
+            document.getElementById("date").value = "";
+        })
+        .catch(err => {
+            alert("❌ ส่งข้อมูลล้มเหลว ตรวจสอบ Webhook URL");
+            console.error(err);
+        });
+    }
+</script>
+
+</body>
+</html>
