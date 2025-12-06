@@ -6,97 +6,135 @@
 <title>ระบบยืมอุปกรณ์กีฬา</title>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap');
+
     body {
         font-family: 'Prompt', sans-serif;
         margin: 0;
         padding: 0;
-        background: linear-gradient(135deg, #00aaff, #0055ff);
+        height: 100vh;
+        background: linear-gradient(135deg, #6dd5fa, #2980b9);
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
+        overflow: hidden;
     }
 
+    /* เอฟเฟกต์วงกลมพื้นหลัง */
+    .bg-circle {
+        position: absolute;
+        width: 380px;
+        height: 380px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        filter: blur(50px);
+        animation: float 6s infinite alternate ease-in-out;
+    }
+
+    .circle1 { top: -80px; left: -80px; }
+    .circle2 { bottom: -80px; right: -80px; animation-delay: 1.5s; }
+
+    @keyframes float {
+        from { transform: translateY(0); }
+        to { transform: translateY(50px); }
+    }
+
+    /* กล่องหลักแบบ glassmorphism */
     .container {
-        background: white;
-        padding: 30px;
-        border-radius: 18px;
-        max-width: 420px;
         width: 90%;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        max-width: 430px;
+        padding: 35px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
         animation: fadeIn 0.5s ease;
+        position: relative;
+        z-index: 2;
     }
 
     @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(10px);}
+        from {opacity: 0; transform: translateY(12px);}
         to {opacity: 1; transform: translateY(0);}
     }
 
     h2 {
         text-align: center;
-        color: #0055ff;
-        margin-bottom: 20px;
+        font-size: 26px;
+        color: #ffffff;
         letter-spacing: 1px;
+        margin-bottom: 20px;
+        text-shadow: 0 3px 6px rgba(0,0,0,0.3);
     }
 
     label {
+        color: #ffffff;
         font-weight: bold;
-        color: #333;
         margin-top: 10px;
         display: block;
+        font-size: 14px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
 
     input, select {
         width: 100%;
         padding: 12px;
-        margin: 8px 0 18px 0;
-        border-radius: 10px;
-        border: 2px solid #dce3ff;
-        background: #f7f9ff;
+        margin: 8px 0 20px 0;
+        border-radius: 12px;
+        border: none;
         font-size: 15px;
+        background: rgba(255,255,255,0.85);
+        box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
         transition: 0.3s;
     }
 
     input:focus, select:focus {
-        border-color: #0055ff;
-        background: white;
-        box-shadow: 0 0 8px rgba(0,85,255,0.3);
+        background: #ffffff;
+        box-shadow: 0 0 10px rgba(255,255,255,0.7);
         outline: none;
+        transform: scale(1.02);
     }
 
+    /* ปุ่มสวยหรู */
     button {
         width: 100%;
-        padding: 14px;
-        font-size: 17px;
-        background: linear-gradient(135deg, #0055ff, #00aaff);
+        padding: 15px;
+        font-size: 18px;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
         color: white;
         border: none;
-        border-radius: 12px;
+        border-radius: 14px;
         cursor: pointer;
+        font-weight: bold;
         transition: 0.25s;
-        box-shadow: 0 5px 15px rgba(0,85,255,0.4);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     }
 
     button:hover {
-        background: linear-gradient(135deg, #0041cc, #0093dd);
+        background: linear-gradient(135deg, #162f62, #234c8a);
         transform: translateY(-2px);
     }
 
     button:active {
-        transform: scale(0.98);
+        transform: scale(0.97);
     }
 </style>
 </head>
 
 <body>
 
+<!-- วงกลมพื้นหลัง -->
+<div class="bg-circle circle1"></div>
+<div class="bg-circle circle2"></div>
+
 <div class="container">
     <h2>📦 ระบบยืมอุปกรณ์กีฬา</h2>
 
-    <label>ชื่อผู้ยืม</label>
+    <label>👤 ชื่อผู้ยืม</label>
     <input type="text" id="borrower" placeholder="กรอกชื่อผู้ยืม">
 
-    <label>เลือกอุปกรณ์กีฬา</label>
+    <label>🏅 เลือกอุปกรณ์กีฬา</label>
     <select id="item">
         <option value="ฟุตบอล">⚽ ฟุตบอล</option>
         <option value="บาสเกตบอล">🏀 บาสเกตบอล</option>
@@ -105,15 +143,15 @@
         <option value="เชือกกระโดด">🪢 เชือกกระโดด</option>
     </select>
 
-    <label>วันที่ยืม</label>
+    <label>📅 วันที่ยืม</label>
     <input type="date" id="date">
 
-    <button onclick="sendToDiscord()">บันทึกการยืม</button>
+    <button onclick="sendToDiscord()">📨 บันทึกการยืม</button>
 </div>
 
 <script>
-    // ⭐ ใส่ Discord Webhook URL ของคุณตรงนี้
-    const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1444683050607837326/03MLghTEsrjL_1T7bjne6ATyALbOnR5fhfgnsyXXivC5-GKAOt1pP-oRgVhqMgVhzNEf";
+    const DISCORD_WEBHOOK_URL =
+    "https://discordapp.com/api/webhooks/1444683050607837326/03MLghTEsrjL_1T7bjne6ATyALbOnR5fhfgnsyXXivC5-GKAOt1pP-oRgVhqMgVhzNEf";
 
     function sendToDiscord() {
         const borrower = document.getElementById("borrower").value;
@@ -130,9 +168,9 @@
                 title: "📣 มีการยืมอุปกรณ์กีฬา",
                 color: 3447003,
                 fields: [
-                    { name: "👤 ผู้ยืม", value: borrower, inline: false },
-                    { name: "🏅 อุปกรณ์", value: item, inline: false },
-                    { name: "📅 วันที่ยืม", value: date, inline: false }
+                    { name: "👤 ผู้ยืม", value: borrower },
+                    { name: "🏅 อุปกรณ์", value: item },
+                    { name: "📅 วันที่ยืม", value: date }
                 ],
                 timestamp: new Date()
             }]
@@ -144,12 +182,12 @@
             body: JSON.stringify(message)
         })
         .then(() => {
-            alert("✅ ส่งข้อมูลสำเร็จ!");
+            alert("✅ บันทึกสำเร็จ!");
             document.getElementById("borrower").value = "";
             document.getElementById("date").value = "";
         })
         .catch(err => {
-            alert("❌ ส่งข้อมูลล้มเหลว ตรวจสอบ Webhook URL");
+            alert("❌ ส่งข้อมูลล้มเหลว");
             console.error(err);
         });
     }
@@ -157,5 +195,3 @@
 
 </body>
 </html>
-
-
